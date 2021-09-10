@@ -17,6 +17,7 @@ on:
 #                      Variables
 #------------------------------------------------------
 
+
 #------------------------------------------------------
 #                 Beginning of the jobs
 #------------------------------------------------------
@@ -27,45 +28,45 @@ jobs:
 #------------------------------------------------------
 
 
-#------------------------------------------------------
-#              job 02 - Dockerfile Linter
-#------------------------------------------------------
-  lint:
-    name: Dockerfile Linter
-    runs-on: ubuntu-18.04
-    steps:
-#---------------------step 02-01-----------------------
-      - name: Checkout
-        uses: actions/checkout@v2
-#---------------------step 02-02-----------------------
-      - uses: hadolint/hadolint-action@v1.6.0
-        with:
-          dockerfile: dockerfile
+# #------------------------------------------------------
+# #              job 02 - Dockerfile Linter
+# #------------------------------------------------------
+#   lint:
+#     name: Dockerfile Linter
+#     runs-on: ubuntu-18.04
+#     steps:
+# #---------------------step 02-01-----------------------
+#       - name: Checkout
+#         uses: actions/checkout@v2
+# #---------------------step 02-02-----------------------
+#       - uses: hadolint/hadolint-action@v1.6.0
+#         with:
+#           dockerfile: dockerfile
 
-#------------------------------------------------------
-#              job 03 - Image Scan with Trivy
-#------------------------------------------------------
-  scan:
-    name: Image Scan
-    needs: lint
-    runs-on: ubuntu-18.04
-    steps:
-#---------------------step 03-01-----------------------
-      - name: Checkout code
-        uses: actions/checkout@v2
-#---------------------step 03-02-----------------------
-      - name: Build an image from Dockerfile
-        run: docker build -t image .
-#---------------------step 03-03-----------------------
-      - name: Image Scan with Trivy
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'image'
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+# #------------------------------------------------------
+# #              job 03 - Image Scan with Trivy
+# #------------------------------------------------------
+#   scan:
+#     name: Image Scan
+#     needs: lint
+#     runs-on: ubuntu-18.04
+#     steps:
+# #---------------------step 03-01-----------------------
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+# #---------------------step 03-02-----------------------
+#       - name: Build an image from Dockerfile
+#         run: docker build -t image .
+# #---------------------step 03-03-----------------------
+#       - name: Image Scan with Trivy
+#         uses: aquasecurity/trivy-action@master
+#         with:
+#           image-ref: 'image'
+#           format: 'table'
+#           exit-code: '1'
+#           ignore-unfixed: true
+#           vuln-type: 'os,library'
+#           severity: 'CRITICAL,HIGH'
 
 #------------------------------------------------------
 # job 04 - Build e Push do container para o Docker Hub
@@ -73,7 +74,7 @@ jobs:
   push:
     name: Publish the Image to AWS ECR
     if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' }}
-    needs: [scan]
+    # needs: [scan]
     runs-on: ubuntu-18.04
     steps:
 #---------------------step 04-01-----------------------
@@ -91,11 +92,13 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 #---------------------step 04-04-----------------------
-      - name: Build, tag, and push image to Amazon ECR
+      - name: Create variables
+        run: echo "IMAGE_TAG=${{ github.sha }}-$(date --utc +%Y%m%d%H%M%S)" >> $GITHUB_ENV
         env:
           ECR_REGISTRY: 903946785371.dkr.ecr.us-east-2.amazonaws.com
-          ECR_REPOSITORY: "samurai"
-          IMAGE_TAG: ${{ github.sha }}-$(date --utc +%Y%m%d%H%M%S)
+          ECR_REPOSITORY: "samurai"          
+#---------------------step 04-05-----------------------
+      - name: Build, tag, and push image to Amazon ECR
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
