@@ -97,7 +97,8 @@ jobs:
           echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
           echo "IMAGE_TAG=$SHORT_SHA-$(date --utc +%Y%m%d%H%M%S)" >> $GITHUB_ENV
         env:
-          ECR_REGISTRY: 903946785371.dkr.ecr.us-east-2.amazonaws.com
+          # ECR_REGISTRY: 903946785371.dkr.ecr.us-east-2.amazonaws.com
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: "samurai"          
 #---------------------step 04-05-----------------------
       - name: Build, tag, and push image to Amazon ECR
