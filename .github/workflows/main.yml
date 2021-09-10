@@ -92,15 +92,17 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 #---------------------step 04-04-----------------------
-      - name: Create variables
+      - name: Create Short SHA Commit
         run: |
-          echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
-          echo "IMAGE_TAG=${SHORT_SHA}-$(date --utc +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+          echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV        
+#---------------------step 04-05-----------------------
+      - name: Create variables
+        run: echo "IMAGE_TAG=$SHORT_SHA-$(date --utc +%Y%m%d%H%M%S)" >> $GITHUB_ENV
         env:
           # ECR_REGISTRY: 903946785371.dkr.ecr.us-east-2.amazonaws.com
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: "samurai"          
-#---------------------step 04-05-----------------------
+#---------------------step 04-06-----------------------
       - name: Build, tag, and push image to Amazon ECR
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
