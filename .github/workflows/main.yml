@@ -93,7 +93,9 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 #---------------------step 04-04-----------------------
       - name: Create variables
-        run: echo "IMAGE_TAG=${{ github.sha }}-$(date --utc +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+        run: |
+          echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+          echo "IMAGE_TAG=$SHORT_SHA-$(date --utc +%Y%m%d%H%M%S)" >> $GITHUB_ENV
         env:
           ECR_REGISTRY: 903946785371.dkr.ecr.us-east-2.amazonaws.com
           ECR_REPOSITORY: "samurai"          
