@@ -93,7 +93,7 @@ jobs:
         env:
           ECR_REGISTRY: 903946785371.dkr.ecr.us-east-2.amazonaws.com
           ECR_REPOSITORY: "samurai"
-          IMAGE_TAG: ${{ github.sha }}-${{ date --utc +%Y%m%d%H%M%S }}
+          IMAGE_TAG: ${{ github.sha }}-$(date --utc +%Y%m%d%H%M%S)
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
