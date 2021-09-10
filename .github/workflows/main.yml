@@ -1,0 +1,99 @@
+#------------------------------------------------------
+#                        Header
+#------------------------------------------------------
+# Action name and Its triggers
+name: App CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+#------------------------------------------------------
+#                      Variables
+#------------------------------------------------------
+
+#------------------------------------------------------
+#                 Beginning of the jobs
+#------------------------------------------------------
+jobs:
+
+#------------------------------------------------------
+#              job 01 - Code Tests
+#------------------------------------------------------
+
+
+#------------------------------------------------------
+#              job 02 - Dockerfile Linter
+#------------------------------------------------------
+  lint:
+    name: Dockerfile Linter
+    runs-on: ubuntu-18.04
+    steps:
+#---------------------step 02-01-----------------------
+      - name: Checkout
+        uses: actions/checkout@v2
+#---------------------step 02-02-----------------------
+      - uses: hadolint/hadolint-action@v1.6.0
+        with:
+          dockerfile: dockerfile
+
+#------------------------------------------------------
+#              job 03 - Image Scan with Trivy
+#------------------------------------------------------
+  scan:
+    name: Image Scan
+    needs: lint
+    runs-on: ubuntu-18.04
+    steps:
+#---------------------step 03-01-----------------------
+      - name: Checkout code
+        uses: actions/checkout@v2
+#---------------------step 03-02-----------------------
+      - name: Build an image from Dockerfile
+        run: docker build -t image .
+#---------------------step 03-03-----------------------
+      - name: Image Scan with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'image'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
+#------------------------------------------------------
+# job 04 - Build e Push do container para o Docker Hub
+#------------------------------------------------------
+  push:
+    name: Publish the Image to AWS ECR
+    if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' }}
+    needs: [scan, test]
+    runs-on: ubuntu-18.04
+    steps:
+#---------------------step 04-01-----------------------
+      - name: Checkout
+        uses: actions/checkout@v2
+#---------------------step 04-02-----------------------
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
+#---------------------step 04-03-----------------------
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+#---------------------step 04-04-----------------------
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: 903946785371.dkr.ecr.us-east-2.amazonaws.com
+          ECR_REPOSITORY: "samurai"
+          IMAGE_TAG: ${{ github.sha }}-${{ date --utc +%Y%m%d%H%M%S }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
