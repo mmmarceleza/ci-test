@@ -71,7 +71,7 @@ jobs:
   push:
     name: Publish the Image to AWS ECR
     if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' }}
-    needs: [scan, test]
+    needs: [scan]
     runs-on: ubuntu-18.04
     steps:
 #---------------------step 04-01-----------------------
