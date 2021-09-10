@@ -101,14 +101,14 @@ jobs:
         env:
           ECR_REGISTRY: "903946785371.dkr.ecr.us-east-2.amazonaws.com"
           # ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: "samurai"          
+          ECR_REPOSITORY: "samurai"      
 #---------------------step 04-06-----------------------
       - name: Build, tag, and push image to Amazon ECR
         run: |
           echo marcelo
           echo $SHORT_SHA
           echo $IMAGE_TAG
-          echo ${{ env.ECR_REGISTRY }}
-          echo ${{ env.ECR_REPOSITORY }}
+          echo ${{ ECR_REGISTRY }}
+          echo ${{ ECR_REPOSITORY }}
           docker build -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }} .
           docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
