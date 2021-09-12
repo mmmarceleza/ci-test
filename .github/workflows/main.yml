@@ -17,7 +17,7 @@ on:
 #                      Variables
 #------------------------------------------------------
 env:
-  ECR_REPOSITORY: "samurai"
+  ECR_REPOSITORY: "samurai"      
   AWS_REGION: "us-east-2"
 
 #------------------------------------------------------
