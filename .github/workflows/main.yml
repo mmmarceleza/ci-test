@@ -33,7 +33,7 @@ jobs:
   #------------------------------------------------------
   lint:
     name: Dockerfile Linter
-    if: ${{ github.event_name == 'pull_request' && !github.event.action == 'closed' }}
+    if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
     runs-on: ubuntu-18.04
     steps:
       #---------------------step 02-01-----------------------
@@ -49,7 +49,7 @@ jobs:
   #------------------------------------------------------
   scan:
     name: Image Scan
-    if: ${{ github.event_name == 'pull_request' && !github.event.action == 'closed' }}
+    if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
     needs: lint
     runs-on: ubuntu-18.04
     steps:
