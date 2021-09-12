@@ -60,14 +60,14 @@ jobs:
       #---------------------step 03-03-----------------------
       - name: Image Scan with Trivy
         uses: aquasecurity/trivy-action@master
-        continue-on-error: true
+        # continue-on-error: true
         with:
           image-ref: "image"
           format: "table"
-          exit-code: "1"
+          exit-code: "0"
           ignore-unfixed: true
           vuln-type: "os,library"
-          severity: "CRITICAL,HIGH"
+          severity: "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
 
   #------------------------------------------------------
   # job 04 - Build e Push do container para o Docker Hub
