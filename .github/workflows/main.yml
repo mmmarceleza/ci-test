@@ -3,7 +3,7 @@
 #                        Header
 #------------------------------------------------------
 # Action name and Its triggers
-name: App CI
+name: App CI teste
 on:
   pull_request:
     types:
