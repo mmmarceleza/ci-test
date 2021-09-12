@@ -8,6 +8,7 @@ on:
   pull_request:
     types:
       - "opened"
+      - "edited"
       - "closed"
     branches:
       - master
@@ -32,7 +33,7 @@ jobs:
   #------------------------------------------------------
   lint:
     name: Dockerfile Linter
-    if: ${{ github.event_name == 'pull_request' && github.event.action == 'opened' }}
+    if: ${{ github.event_name == 'pull_request' && github.event.action == 'edited' }}
     runs-on: ubuntu-18.04
     steps:
       #---------------------step 02-01-----------------------
