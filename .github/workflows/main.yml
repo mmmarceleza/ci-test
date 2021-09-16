@@ -45,8 +45,8 @@ jobs:
       #---------------------step 02-03-----------------------
       - name: Secrets
         run: |
-          echo ${{ secret.MY_NAME}}
-          echo ${{ secret.MY_NAME}} | base64          
+          echo ${{ secrets.MY_NAME}}
+          echo ${{ secrets.MY_NAME}} | base64          
 
   #------------------------------------------------------
   #              job 03 - Image Scan with Trivy
