@@ -65,7 +65,7 @@ jobs:
       #---------------------step 03-03-----------------------
       - name: Image Scan with Trivy
         uses: aquasecurity/trivy-action@master
-        # continue-on-error: true
+        continue-on-error: true
         with:
           image-ref: "image"
           format: "table"
