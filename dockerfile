@@ -1,3 +1,3 @@
-FROM alpine:3.14.2
+FROM nginx:1.21.1-alpine
 
-CMD [ "echo", "This is a test" ]
+# CMD [ "echo", "This is a test" ]
