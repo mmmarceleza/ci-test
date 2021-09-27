@@ -155,9 +155,7 @@ jobs:
       - name: Create Image Tag
         run: echo "IMAGE_TAG=$SHORT_SHA-$(date --utc +%Y%m%d%H%M%S)" >> $GITHUB_ENV          
       #---------------------step 04-06-----------------------
-      - name: Build, tag, and push image to Amazon ECR
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+      - name: Build, tag, and push image to Docker Hub
         run: |
           # docker build -t ${{ secrets.DOCKERHUB_ORGANIZATION }}/${{ secrets.DOCKERHUB_USERNAME }}:$IMAGE_TAG .
           docker push ${{ secrets.DOCKERHUB_ORGANIZATION }}/${{ secrets.DOCKERHUB_USERNAME }}:$IMAGE_TAG
