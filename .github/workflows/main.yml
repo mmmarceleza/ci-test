@@ -5,20 +5,20 @@
 # Action name and Its triggers
 name: App CI teste
 on:
-  pull_request:
-    types:
-      - "opened"
-      - "synchronize"
-      - "closed"
+  push:
+  #   types:
+  #     - "opened"
+  #     - "synchronize"
+  #     - "closed"
     branches:
       - master
 
 #------------------------------------------------------
 #                      Variables
 #------------------------------------------------------
-env:
-  ECR_REPOSITORY: "samurai"
-  AWS_REGION: "us-east-2"
+# env:
+#   ECR_REPOSITORY: "samurai"
+#   AWS_REGION: "us-east-2"
 
 #------------------------------------------------------
 #                 Beginning of the jobs
@@ -118,7 +118,7 @@ jobs:
   #------------------------------------------------------
   push:
     name: Publica a Imagem
-    if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' }}
+    # if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' }}
     # needs: [scan, test]
     runs-on: ubuntu-18.04
     steps:
@@ -155,18 +155,26 @@ jobs:
       - name: Create Image Tag
         run: echo "IMAGE_TAG=$SHORT_SHA-$(date --utc +%Y%m%d%H%M%S)" >> $GITHUB_ENV          
       #---------------------step 04-06-----------------------
-      - name: Build and Push
-        id: docker_build
-        uses: docker/build-push-action@v2
-        with:
-          builder: ${{ steps.buildx.outputs.name }}
-          context: .
-          file: ./dockerfile
-          platforms: linux/amd64
-          push: true
-          tags: ${{ secrets.DOCKERHUB_ORGANIZATION }}/app4:$IMAGE_TAG
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          # docker build -t ${{ secrets.DOCKERHUB_ORGANIZATION }}/${{ secrets.DOCKERHUB_USERNAME }}:$IMAGE_TAG .
+          docker push ${{ secrets.DOCKERHUB_ORGANIZATION }}/${{ secrets.DOCKERHUB_USERNAME }}:$IMAGE_TAG
+
+
+      # - name: Build and Push
+      #   id: docker_build
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     builder: ${{ steps.buildx.outputs.name }}
+      #     context: .
+      #     file: ./dockerfile
+      #     platforms: linux/amd64
+      #     push: true
+      #     tags: ${{ secrets.DOCKERHUB_ORGANIZATION }}/app4:$IMAGE_TAG
+      #     cache-from: type=local,src=/tmp/.buildx-cache
+      #     cache-to: type=local,dest=/tmp/.buildx-cache
 
 
   # #------------------------------------------------------
