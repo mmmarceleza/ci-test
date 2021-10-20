@@ -1,3 +1,4 @@
-FROM nginx:1.21.1-alpine
+# FROM nginx:1.21.1-alpine
+FROM alpine:3.14
 
-# CMD [ "echo", "This is a test" ]
+ENTRYPOINT [ "/bin/sh" ] 
