@@ -41,6 +41,8 @@ jobs:
       #---------------------step 02-03-------------------
       - name: Download image
         run: | 
+          gh repo clone ci-test
+          cd ci-test
           gh run download -n myimage
           docker load --input myimage.tar
           docker images
