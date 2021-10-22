@@ -14,16 +14,16 @@ on: workflow_dispatch
 #                 Beginning of the jobs
 #------------------------------------------------------
 jobs:
-  #------------------------------------------------------
-  #              Job 01 - Notify Sucess
-  #------------------------------------------------------
-  notify:
-    name: Notify Sucess
-    runs-on: ubuntu-18.04
-    steps:
-      #---------------------step 01-01-------------------
-      - name: Echo Success
-        run: echo "Health check successes"
+  # #------------------------------------------------------
+  # #              Job 01 - Notify Sucess
+  # #------------------------------------------------------
+  # notify:
+  #   name: Notify Sucess
+  #   runs-on: ubuntu-18.04
+  #   steps:
+  #     #---------------------step 01-01-------------------
+  #     - name: Echo Success
+  #       run: echo "Health check successes"
 
   #------------------------------------------------------
   #             Job 02 - Rename Docker Image
@@ -47,6 +47,6 @@ jobs:
           # cd ci-test
           gh run download -n myimage
           docker load --input myimage.tar
-          docker images
+          docker run myimage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

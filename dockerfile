@@ -1,4 +1,4 @@
-FROM nginx:1.21.1-alpine
-# FROM alpine:3.14
+# FROM nginx:1.21.1-alpine
+FROM alpine:3.14
 
-# ENTRYPOINT [ "/bin/sh" ] 
+ENTRYPOINT [ "/bin/echo", "Marcelo" ] 
