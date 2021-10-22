@@ -33,18 +33,20 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       #---------------------step 02-01-----------------------
-      - name: Checkout
-        uses: actions/checkout@v2    
+      # - name: Checkout
+      #   uses: actions/checkout@v2    
       #---------------------step 02-02-----------------------
       # - name: Set up Docker Buildx
       #   uses: docker/setup-buildx-action@v1          
       #---------------------step 02-03-------------------
       - name: Download image
         run: | 
-          git config --global credential.https://github.com.helper ''
-          git config --global --add credential.https://github.com.helper '!'$(which gh)' auth git-credential'
-          gh repo clone ci-test
-          cd ci-test
+          # git config --global credential.https://github.com.helper ''
+          # git config --global --add credential.https://github.com.helper '!'$(which gh)' auth git-credential'
+          # gh repo clone ci-test
+          # cd ci-test
           gh run download -n myimage
           docker load --input myimage.tar
           docker images
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
