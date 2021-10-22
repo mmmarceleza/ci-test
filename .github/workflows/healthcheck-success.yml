@@ -41,6 +41,8 @@ jobs:
       #---------------------step 02-03-------------------
       - name: Download image
         run: | 
+          git config --global credential.https://github.com.helper ''
+          git config --global --add credential.https://github.com.helper '!'$(which gh)' auth git-credential'
           gh repo clone ci-test
           cd ci-test
           gh run download -n myimage
