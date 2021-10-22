@@ -15,12 +15,29 @@ on: workflow_dispatch
 #------------------------------------------------------
 jobs:
   #------------------------------------------------------
-  #              job 01 -
+  #              Job 01 - Notify Sucess
   #------------------------------------------------------
-  lint:
-    name: Echo Success
+  notify:
+    name: Notify Sucess
     runs-on: ubuntu-18.04
     steps:
       #---------------------step 01-01-------------------
       - name: Echo Success
         run: echo "Health check successes"
+
+  #------------------------------------------------------
+  #             Job 02 - Rename Docker Image
+  #------------------------------------------------------
+  tag:
+    name: Tag Image Production
+    runs-on: ubuntu-18.04
+    steps:
+      #---------------------step 02-01-----------------------
+      # - name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v1          
+      #---------------------step 02-01-------------------
+      - name: Download image
+        run: | 
+          gh run download -n myimage
+          docker load --input myimage.tar
+          docker images
