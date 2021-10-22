@@ -33,9 +33,12 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       #---------------------step 02-01-----------------------
+      - name: Checkout
+        uses: actions/checkout@v2    
+      #---------------------step 02-02-----------------------
       # - name: Set up Docker Buildx
       #   uses: docker/setup-buildx-action@v1          
-      #---------------------step 02-01-------------------
+      #---------------------step 02-03-------------------
       - name: Download image
         run: | 
           gh run download -n myimage
