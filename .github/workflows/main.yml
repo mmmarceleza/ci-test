@@ -120,7 +120,7 @@ jobs:
   push:
     name: Publica a Imagem
     # if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' }}
-    # needs: [scan, test]
+    needs: build
     runs-on: ubuntu-18.04
     steps:
       #---------------------step 04-01-----------------------
