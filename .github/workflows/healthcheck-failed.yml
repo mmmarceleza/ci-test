@@ -19,7 +19,7 @@ jobs:
   #------------------------------------------------------
   lint:
     name: Echo Failed
-    runs-on: [self-hosted, linux, ARM64]
+    runs-on: [self-hosted, linux, x64]
     steps:
       #---------------------step 01-01-------------------
       - name: Echo Failed
