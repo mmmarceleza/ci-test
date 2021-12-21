@@ -40,6 +40,20 @@ jobs:
       - name: print env
         run: echo $ENVIRONMENT
 
+  teste-run-job:
+    name: Teste run job
+    runs-on: ubuntu-20.04
+    if: ${{ github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master' }}
+    steps:
+      - name: Set develop environmental
+        if: ${{ github.ref == 'refs/heads/develop' }}
+        run: echo "ENVIRONMENT=develop" >> $GITHUB_ENV
+      #---------------------step-08--------------------------
+      - name: Set staging environmental
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: echo "ENVIRONMENT=staging" >> $GITHUB_ENV
+      - name: print env
+        run: echo $ENVIRONMENT
   #------------------------------------------------------
   #              job 01 - Code Tests
   #------------------------------------------------------
