@@ -31,11 +31,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Set develop environmental
-        if: ${{ github.ref == 'refs/heads/develop' || github.base_ref == 'refs/heads/develop' }}
+        if: ${{ github.ref == 'refs/heads/develop' || github.head_ref == 'refs/heads/develop' }}
         run: echo "ENVIRONMENT=develop" >> $GITHUB_ENV
       #---------------------step-08--------------------------
       - name: Set staging environmental
-        if: ${{ github.ref == 'refs/heads/master' || github.base_ref == 'refs/heads/master'  }}
+        if: ${{ github.ref == 'refs/heads/master' || github.head_ref == 'refs/heads/master'  }}
         run: echo "ENVIRONMENT=staging" >> $GITHUB_ENV
       - name: print env
         run: echo $ENVIRONMENT
