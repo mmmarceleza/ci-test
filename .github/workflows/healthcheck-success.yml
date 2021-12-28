@@ -34,13 +34,13 @@ jobs:
     steps:
       #---------------------step 02-01-----------------------
       - name: Checkout
-        uses: actions/checkout@v2    
+        uses: actions/checkout@v2
       #---------------------step 02-02-----------------------
       # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v1          
+      #   uses: docker/setup-buildx-action@v1
       #---------------------step 02-03-------------------
       - name: Download image
-        run: | 
+        run: |
           gh run download -n myimage
           docker load --input myimage.tar
           docker run myimage
