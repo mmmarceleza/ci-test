@@ -3,7 +3,7 @@
 #                        Header
 #------------------------------------------------------
 # Action name and Its triggers
-name: Docker push
+name: main
 on: workflow_dispatch
 # on:
 #   push:
