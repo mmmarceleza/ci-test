@@ -3,7 +3,7 @@
 #                        Header
 #------------------------------------------------------
 # Action name and Its triggers
-name: App CI teste
+name: Docker push
 on: workflow_dispatch
 # on:
 #   push:
